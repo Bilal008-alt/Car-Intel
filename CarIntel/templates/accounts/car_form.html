@@ -1,10 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends 'base.html' %}
+{% block content %}
+<div class="card-premium" style="max-width: 550px; margin: 40px auto;">
+    <div style="text-align: center; margin-bottom: 25px;">
+        <h3 style="font-size: 1.75rem; color: #0f172a; font-weight: 700;">Configure Vehicle Record</h3>
+        <p style="color: #64748b; font-size: 0.85rem;">Fill out specifications and upload an authentic image asset</p>
+    </div>
+
+    <form method="POST" enctype="multipart/form-data" autocomplete="off">
+        {% csrf_token %}
+        {% for field in form %}
+            <div style="margin-bottom: 15px;">
+                <label style="font-size: 0.85rem; font-weight: 600; color: #475569;">{{ field.label }}</label>
+                {{ field }}
+            </div>
+        {% endfor %}
+        <button type="submit" class="btn-action" style="width: 100%; margin-top: 10px; padding: 12px;">Save Vehicle Details ✓</button>
+    </form>
+</div>
+{% endblock %}

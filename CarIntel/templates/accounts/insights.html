@@ -1,10 +1,124 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends 'base.html' %}
+{% block title %}Data Insights - CarIntel Platform{% endblock %}
+
+{% block content %}
+<style>
+    /* Premium Analytical Dashboard Styles */
+    .insights-header {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 25px;
+        margin-bottom: 30px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.01);
+    }
+    .chart-card {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 24px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .chart-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.04);
+    }
+    .analytics-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 25px;
+        margin-bottom: 30px;
+    }
+    @media (max-width: 768px) {
+        .analytics-grid { grid-template-columns: 1fr; }
+    }
+    .metric-badge {
+        background: #f0fdf4;
+        color: #166534;
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+    }
+</style>
+
+<!-- 📈 Header Canvas -->
+<div class="insights-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
+    <div>
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 4px;">
+            <h2 style="font-weight: 700; color: #0f172a; margin: 0;">Market Intelligence & Analytics</h2>
+            <span class="metric-badge">⚡ Live Sync</span>
+        </div>
+        <p style="color: #64748b; font-size: 0.9rem; margin: 0;">Graphical visualization models parsed from enterprise database clusters</p>
+    </div>
+    <div style="display: flex; gap: 10px;">
+        <a href="{% url 'profile' %}" class="btn-action" style="background: #f1f5f9; color: #1e293b; border: 1px solid #cbd5e1; padding: 10px 18px; font-size: 0.85rem;">
+            ← Back to Dashboard
+        </a>
+        <a href="{% url 'car_search' %}" class="btn-action" style="padding: 10px 18px; font-size: 0.85rem; background: #10b981;">
+            Explore Fleet Inventory
+        </a>
+    </div>
+</div>
+
+<!-- 📊 Chart Layout Matrix (2-Column Grid) -->
+<div class="analytics-grid">
+
+    <!-- Chart 1: Price Distribution / Brand Analysis -->
+    <div class="chart-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #f1f5f9; padding-bottom: 12px;">
+            <div>
+                <h4 style="font-weight: 700; color: #1e293b; margin: 0 0 4px 0; font-size: 1.1rem;">Brand Valuation Matrix</h4>
+                <p style="color: #64748b; font-size: 0.75rem; margin: 0;">Aggregated price curves classified by manufacturers</p>
+            </div>
+            <i class="fa-solid fa-chart-bar" style="color: #10b981; font-size: 1.2rem;"></i>
+        </div>
+        <div style="position: relative; min-height: 300px; display: flex; align-items: center; justify-content: center; background: #f8fafc; border-radius: 8px; border: 1px dashed #e2e8f0;">
+            <!-- Your Chart Canvas / Object Target -->
+            {% if chart_data_1 %}
+                {{ chart_data_1|safe }}
+            {% else %}
+                <div style="text-align: center; color: #94a3b8; font-size: 0.85rem; padding: 20px;">
+                    <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=120&auto=format&fit=crop&q=60" alt="Chart Placeholder" style="opacity: 0.15; margin-bottom: 10px; width: 80px; display: block; margin: 0 auto 10px auto;"><br>
+                    [ Inject Chart.js / Plotly Object Canvas Here ]
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Chart 2: Transmission or Fuel Configurations -->
+    <div class="chart-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #f1f5f9; padding-bottom: 12px;">
+            <div>
+                <h4 style="font-weight: 700; color: #1e293b; margin: 0 0 4px 0; font-size: 1.1rem;">Transmission & Powertrain Share</h4>
+                <p style="color: #64748b; font-size: 0.75rem; margin: 0;">Market allocation percentages inside system database</p>
+            </div>
+            <i class="fa-solid fa-chart-pie" style="color: #3b82f6; font-size: 1.2rem;"></i>
+        </div>
+        <div style="position: relative; min-height: 300px; display: flex; align-items: center; justify-content: center; background: #f8fafc; border-radius: 8px; border: 1px dashed #e2e8f0;">
+            <!-- Your Chart Canvas / Object Target -->
+            {% if chart_data_2 %}
+                {{ chart_data_2|safe }}
+            {% else %}
+                <div style="text-align: center; color: #94a3b8; font-size: 0.85rem; padding: 20px;">
+                    <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=120&auto=format&fit=crop&q=60" alt="Chart Placeholder" style="opacity: 0.15; margin-bottom: 10px; width: 80px; display: block; margin: 0 auto 10px auto;"><br>
+                    [ Inject Chart.js / Plotly Object Canvas Here ]
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+</div>
+
+<!-- 💡 System Strategic Report Summary Layer -->
+<div class="chart-card" style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); color: white; border: none;">
+    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 10px;">
+        <i class="fa-solid fa-lightbulb" style="color: #f59e0b; font-size: 1.2rem;"></i>
+        <h5 style="font-weight: 700; margin: 0; font-size: 1.05rem; letter-spacing: 0.3px;">Automated Data Engine Summary</h5>
+    </div>
+    <p style="color: #94a3b8; font-size: 0.85rem; line-height: 1.6; max-width: 850px; margin: 0;">
+        Based on the imported dataset variables, local market metrics show a high concentration of vehicle counts within premium sedan segments. Pricing dynamics remain stable, indicating robust system validation workflows across automated tracking models.
+    </p>
+</div>
+{% endblock %}

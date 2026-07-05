@@ -1,10 +1,303 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends 'base.html' %}
+{% block title %}Login - CarIntel Dashboard{% endblock %}
+
+{% block content %}
+<style>
+    /* 🌌 Dark Base Container */
+    .fortuner-canvas {
+        background-color: #040711;
+        min-height: 85vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        position: relative;
+        overflow: hidden;
+        border-radius: 16px;
+        font-family: 'Segoe UI', Roboto, sans-serif;
+    }
+
+    /* 🎛️ Main Box Split Layout */
+    .suv-studio-layout {
+        display: flex;
+        width: 100%;
+        max-width: 1100px;
+        background: linear-gradient(135deg, #090d1a 0%, #02050e 100%);
+        border: 1px solid rgba(255, 255, 255, 0.03);
+        border-radius: 24px;
+        overflow: hidden;
+        z-index: 5;
+        box-shadow: 0 25px 60px rgba(0,0,0,0.6);
+    }
+
+    /* Left Panel: Fortuner Light Assembly */
+    .fortuner-front-hub {
+        flex: 1.3;
+        background: #060913;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 50px;
+        border-right: 1px solid rgba(255, 255, 255, 0.04);
+        position: relative;
+    }
+
+    /* Right Panel: Login Form Side */
+    .fortuner-auth-hub {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 50px;
+        position: relative;
+        background: rgba(2, 5, 14, 0.3);
+    }
+
+    /* 🔴 Engine Button */
+    .fortuner-ignite-btn {
+        background: radial-gradient(circle, #dc2626 0%, #851414 100%);
+        color: white;
+        font-weight: 800;
+        letter-spacing: 2px;
+        width: 115px;
+        height: 115px;
+        border: 5px solid #450a0a;
+        border-radius: 50%;
+        cursor: pointer;
+        box-shadow: 0 0 20px rgba(220, 38, 38, 0.4), inset 0 3px 8px rgba(255,255,255,0.3);
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        text-align: center;
+        margin-bottom: 50px;
+        z-index: 10;
+    }
+
+    /* 🚘 Fortuner Headlight Shape */
+    .fortuner-headlight-housing {
+        width: 320px;
+        height: 70px;
+        background: #0f1322;
+        border: 2px solid #2d3748;
+        border-radius: 80px 15px 40px 10px;
+        position: relative;
+        box-shadow: inset 0 0 15px rgba(0,0,0,0.9);
+        display: flex;
+        align-items: center;
+        padding: 0 25px;
+        gap: 12px;
+        transition: all 0.4s ease;
+    }
+
+    /* Triple LED Crystals */
+    .fortuner-led-crystal {
+        width: 28px;
+        height: 24px;
+        background: #1e2538;
+        border: 1px solid #334155;
+        border-radius: 6px;
+        transform: skewX(-10deg);
+        transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+    }
+
+    /* Bottom DRL Line */
+    .fortuner-drl-line {
+        position: absolute;
+        bottom: 8px;
+        left: 25px;
+        width: 240px;
+        height: 4px;
+        background: #1e2538;
+        border-radius: 2px;
+        transition: all 0.4s ease;
+    }
+
+    /* 💡 High Intensity Beam (Roshni) */
+    .fortuner-projector-beam {
+        position: absolute;
+        top: 20px;
+        left: 270px;
+        width: 0vw;
+        height: 120px;
+        background: linear-gradient(90deg, #ffffff 0%, rgba(255, 255, 255, 0.8) 100px, rgba(56, 189, 248, 0.35) 300px, rgba(56, 189, 248, 0) 100%);
+        filter: blur(12px);
+        opacity: 0;
+        transform-origin: left center;
+        transition: width 0.9s cubic-bezier(0.075, 0.82, 0.165, 1), opacity 0.4s ease;
+        pointer-events: none;
+        z-index: 8;
+    }
+
+    /* ⚡ Active States */
+    .engine-running .fortuner-ignite-btn {
+        background: radial-gradient(circle, #10b981 0%, #047857 100%);
+        border-color: #022c22;
+        box-shadow: 0 0 30px rgba(16, 185, 129, 0.7);
+    }
+
+    .engine-running .fortuner-headlight-housing { border-color: #38bdf8; box-shadow: 0 0 25px rgba(56, 189, 248, 0.25); }
+    .engine-running .fortuner-drl-line { background: #38bdf8; box-shadow: 0 0 12px #38bdf8; }
+    .engine-running .fortuner-led-crystal { background: #ffffff; border-color: #ffffff; box-shadow: 0 0 20px #ffffff, 0 0 35px #38bdf8; }
+    .engine-running .fortuner-projector-beam { width: 75vw; opacity: 1; }
+
+    /* 📝 Login Form Card */
+    .login-fortuner-card {
+        width: 100%;
+        max-width: 360px;
+        opacity: 0.01;
+        transform: translateX(70px) scale(0.96);
+        transition: all 1s cubic-bezier(0.19, 1, 0.22, 1);
+        pointer-events: none;
+        z-index: 10;
+    }
+
+    .engine-running .login-fortuner-card {
+        opacity: 1;
+        transform: translateX(0) scale(1);
+        pointer-events: auto;
+    }
+
+    /* Easy Inputs */
+    .suv-input-node {
+        width: 100%;
+        padding: 14px 16px;
+        background: rgba(3, 7, 18, 0.95);
+        border: 1px solid #1e293b;
+        border-radius: 12px;
+        color: white;
+        font-size: 0.95rem;
+        outline: none;
+        transition: all 0.3s;
+    }
+
+    .engine-running .suv-input-node:focus {
+        border-color: #38bdf8;
+        box-shadow: 0 0 12px rgba(56, 189, 248, 0.4);
+    }
+
+    /* 👁️ Password Container & Eye Button Style */
+    .password-wrapper {
+        position: relative;
+        display: flex;
+        align-items: center;
+    }
+
+    .toggle-password-btn {
+        position: absolute;
+        right: 15px;
+        background: none;
+        border: none;
+        color: #64748b;
+        cursor: pointer;
+        font-size: 0.85rem;
+        font-weight: 600;
+        user-select: none;
+        padding: 5px;
+    }
+
+    .toggle-password-btn:hover {
+        color: #38bdf8;
+    }
+
+    .status-hud-monitor {
+        color: #1e293b;
+        font-size: 0.7rem;
+        font-weight: 700;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        margin-top: 30px;
+    }
+    .engine-running .status-hud-monitor { color: #38bdf8; }
+
+    @media (max-width: 850px) {
+        .suv-studio-layout { flex-direction: column; }
+        .fortuner-front-hub { border-right: none; border-bottom: 1px solid rgba(255, 255, 255, 0.04); }
+        .fortuner-projector-beam { display: none; }
+    }
+</style>
+
+<div class="fortuner-canvas" id="garageScene">
+    <div class="suv-studio-layout">
+
+        <div class="fortuner-front-hub">
+            <button type="button" class="fortuner-ignite-btn" id="startEngineTrigger">
+                Start<br>Engine
+            </button>
+
+            <div class="fortuner-headlight-housing">
+                <div class="fortuner-led-crystal"></div>
+                <div class="fortuner-led-crystal"></div>
+                <div class="fortuner-led-crystal"></div>
+                <div class="fortuner-drl-line"></div>
+                <div class="fortuner-projector-beam"></div>
+            </div>
+            <div class="status-hud-monitor" id="hudStatus">System: Locked</div>
+        </div>
+
+        <div class="fortuner-auth-hub">
+            <div class="login-fortuner-card">
+                <div style="margin-bottom: 25px;">
+                    <h3 style="color: white; font-size: 1.4rem; font-weight: 700; margin: 0;">Welcome Back</h3>
+                    <p style="color: #64748b; font-size: 0.85rem; margin-top: 5px;">Turn on engine to login to your dashboard.</p>
+                </div>
+
+                <form method="POST">
+                    {% csrf_token %}
+
+                    <div style="margin-bottom: 18px;">
+                        <label style="color: #94a3b8; font-size: 0.8rem; font-weight: 600; display:block; margin-bottom: 6px; text-transform: uppercase;">Username</label>
+                        <input type="text" name="username" class="suv-input-node" placeholder="Enter username" required>
+                    </div>
+
+                    <div style="margin-bottom: 25px;">
+                        <label style="color: #94a3b8; font-size: 0.8rem; font-weight: 600; display:block; margin-bottom: 6px; text-transform: uppercase;">Password</label>
+                        <div class="password-wrapper">
+                            <input type="password" id="passwordField" name="password" class="suv-input-node" placeholder="Enter password" required style="padding-right: 60px;">
+                            <button type="button" class="toggle-password-btn" id="passwordToggle">Show</button>
+                        </div>
+                    </div>
+
+                    <button type="submit" style="width:100%; background:#ffffff; color:#030712; padding:14px; border:none; border-radius:12px; font-weight:700; font-size:0.95rem; cursor:pointer; transition: all 0.3s; text-transform: uppercase; letter-spacing: 1px;">
+                        Login Now →
+                    </button>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    const startEngineTrigger = document.getElementById('startEngineTrigger');
+    const garageScene = document.getElementById('garageScene');
+    const hudStatus = document.getElementById('hudStatus');
+    const passwordField = document.getElementById('passwordField');
+    const passwordToggle = document.getElementById('passwordToggle');
+
+    // 🏎️ 1. Fortuner Engine & Headlight Toggle Control
+    startEngineTrigger.addEventListener('click', () => {
+        garageScene.classList.toggle('engine-running');
+        if(garageScene.classList.contains('engine-running')) {
+            startEngineTrigger.innerHTML = "Stop<br>Engine";
+            hudStatus.innerText = "System: Active";
+        } else {
+            startEngineTrigger.innerHTML = "Start<br>Engine";
+            hudStatus.innerText = "System: Locked";
+        }
+    });
+
+    // 👁️ 2. Password Show/Hide Toggle Control
+    passwordToggle.addEventListener('click', () => {
+        if (passwordField.type === "password") {
+            passwordField.type = "text";
+            passwordToggle.innerText = "Hide";
+            passwordToggle.style.color = "#38bdf8";
+        } else {
+            passwordField.type = "password";
+            passwordToggle.innerText = "Show";
+            passwordToggle.style.color = "#64748b";
+        }
+    });
+</script>
+{% endblock %}

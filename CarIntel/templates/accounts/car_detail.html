@@ -1,10 +1,46 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends 'base.html' %}
+{% block content %}
+<div class="card-premium" style="max-width: 700px; margin: 0 auto; padding: 0; overflow: hidden;">
+    <div style="width: 100%; height: 320px; background-color: #e2e8f0; position: relative;">
+        {% if car.image %}
+    <img class="car-img-thumb" src="{{ car.image.url }}" alt="Car Image">
+{% else %}
+    <img class="car-img-thumb" src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=100&auto=format&fit=crop&q=60" alt="Default Preview">
+{% endif %}
+    </div>
+
+    <div style="padding: 30px;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px;">
+            <div>
+                <h2 style="font-weight: 700; color: #0f172a; margin-bottom: 4px;">{{ car.brand }} {{ car.model }}</h2>
+                <p style="color: #64748b; font-size: 0.85rem;">System Record Owner: <strong>{{ car.owner.username }}</strong></p>
+            </div>
+            <div style="font-size: 1.5rem; font-weight: 700; color: #10b981;">PKR {{ car.price }}</div>
+        </div>
+
+        <hr style="border: 0; border-top: 1px solid #e2e8f0; margin-bottom: 20px;">
+
+        <div class="grid-3" style="margin-bottom: 25px;">
+            <div style="background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0;">
+                <div style="font-size: 0.75rem; color: #64748b; font-weight: 700;">PRODUCTION YEAR</div>
+                <div style="font-size: 1.1rem; font-weight: 600; color: #1e293b; margin-top: 4px;">{{ car.year }}</div>
+            </div>
+            <div style="background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0;">
+                <div style="font-size: 0.75rem; color: #64748b; font-weight: 700;">MILEAGE COUNTER</div>
+                <div style="font-size: 1.1rem; font-weight: 600; color: #1e293b; margin-top: 4px;">{{ car.mileage }} Miles</div>
+            </div>
+            <div style="background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0;">
+                <div style="font-size: 0.75rem; color: #64748b; font-weight: 700;">FUEL INJECTION</div>
+                <div style="font-size: 1.1rem; font-weight: 600; color: #10b981; margin-top: 4px;">{{ car.fuel_type }}</div>
+            </div>
+        </div>
+
+        {% if car.owner == user %}
+            <div style="display: flex; gap: 10px; margin-top: 20px;">
+                <a href="{% url 'car_edit' car.id %}" class="btn-action" style="background: #1e293b;">Modify Parameters</a>
+                <a href="{% url 'car_delete' car.id %}" class="btn-action" style="background: #ef4444;">Terminate Listing</a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

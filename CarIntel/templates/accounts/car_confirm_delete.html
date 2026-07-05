@@ -1,10 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends 'base.html' %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-5 text-center">
+        <div class="card shadow p-5 bg-white border-0">
+            <h3 class="text-danger fw-bold">Confirm Deletion</h3>
+            <p>Are you sure you want to permanently delete this listing record ({{ object }})?</p>
+            <form method="POST">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger px-4 me-2">Yes, Terminate</button>
+                <a href="{% url 'car_search' %}" class="btn btn-secondary px-4">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
